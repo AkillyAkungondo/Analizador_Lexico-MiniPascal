@@ -32,18 +32,22 @@ public class Analizador {
         List<Token> tokens = new ArrayList<>();
         String[] lines = sourceCode.split("\\r?\\n");
 
+        // Variáveis para controle de estados
         boolean inComment = false;
         boolean inString = false;
         StringBuilder stringToken = new StringBuilder();
 
+        // Itera sobre as linhas do código fonte
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
 
+            // Remove comentários de linha
             int commentIndex = line.indexOf("//");
             if (commentIndex != -1) {
                 line = line.substring(0, commentIndex);
             }
 
+            // Verifica se está dentro de um bloco de comentário
             if (inComment) {
                 int endCommentIndex = line.indexOf("*/");
                 if (endCommentIndex != -1) {
@@ -54,10 +58,13 @@ public class Analizador {
                 }
             }
 
+            // Adiciona espaços em pontuações para facilitar a análise
             line = addSpacesToPunctuation(line);
             String[] words = line.split("\\s+");
 
+            // Itera sobre as palavras da linha
             for (String word : words) {
+                // Verifica estados de strings e comentários
                 if (inString) {
                     if (isStringEnd(word)) {
                         // Fim da string
@@ -93,7 +100,7 @@ public class Analizador {
                 } else if (isCommentStart(word)) {
                     tokens.add(new Token(word, "Comment", i + 1));
                 } else {
-                   // tokens.add(new Token(word, "Token não reconhecido", i + 1));
+                    //   tokens.add(new Token(word, "Token não reconhecido" + (i + 1)));
                 }
             }
         }
@@ -101,7 +108,7 @@ public class Analizador {
         return tokens;
     }
 
-    // Métodos auxiliares para análise léxica
+    // Adiciona espaços antes e depois de pontuações em uma linha de código.
     private String addSpacesToPunctuation(String line) {
         StringBuilder sb = new StringBuilder();
 
@@ -122,6 +129,7 @@ public class Analizador {
 
         return sb.toString();
     }
+    // Métodos auxiliares para análise léxica
 
     private boolean isInQuotes(String line, int index) {
         boolean inSingleQuotes = false;
@@ -182,32 +190,23 @@ public class Analizador {
         return word.matches("\\d+(\\.\\d+)?");
     }
 
-   private boolean isStringStart(String word) {
-    return (word.startsWith("'") && word.endsWith("'")) || (word.startsWith("\"") && word.endsWith("\""));
-}
+    //Verifica se uma palavra é o início de uma string.
+    private boolean isStringStart(String word) {
+        return (word.startsWith("'") && word.endsWith("'")) || (word.startsWith("\"") && word.endsWith("\"")) || (word.startsWith("\"") && word.endsWith("'")) || (word.startsWith("'") && word.endsWith("\""));
+    }
 
-
+    // Verifica se uma palavra é o fim de uma string.
     private boolean isStringEnd(String word) {
         return word.endsWith("'") || word.endsWith("\"");
     }
 
+    //verifica se e inicio de comentario
     private boolean isCommentStart(String word) {
         return word.startsWith("/*") && !word.endsWith("*/");
     }
 
-   private boolean isSeparator(String word) {
-    // Lista de separadores permitidos
-    String[] separators = {".", ",", ";", ":", "[", "]", "(", ")", "{", "}"};
-    
-    // Verificar se a palavra é um separador permitido
-    for (String separator : separators) {
-        if (separator.equals(word)) {
-            return true;
-        }
+    //verifica se a palavra e um separador
+    private boolean isSeparator(String word) {
+        return word.matches("[.,;:\\[\\](){}]");
     }
-    
-    return false;
 }
-
-}
-

@@ -30,13 +30,24 @@ public class TableView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tokenTable);
         elapsedTimeLabel = label;
     }
+/**
+ * Exibe os tokens na tabela e atualiza o rótulo de tempo de compilação.
+ *
+ * @param tokens A lista de tokens a serem exibidos.
+ * @param elapsedTime O tempo decorrido durante a análise léxica, em milissegundos.
+ */
 public void displayTokens(List<Token> tokens, long elapsedTime) {
+    // Obtém o modelo da tabela e limpa todas as linhas existentes
     DefaultTableModel model = (DefaultTableModel) TokenTable.getModel();
     model.setRowCount(0);
+
+    // Adiciona cada token como uma nova linha na tabela
     for (Token token : tokens) {
         model.addRow(new Object[]{token.getLexema(), token.getTokenClass(), token.getLinha()});
     }
-    ElapsedTimeLabel.setText("Tempo de Complilacao: " + elapsedTime + " ms"); // Update the elapsed time label
+
+    // Define o texto do rótulo de tempo de compilação para mostrar o tempo decorrido
+    ElapsedTimeLabel.setText("Tempo de Compilação: " + elapsedTime + " ms");
 }
 
     public void displayError(String message) {
@@ -169,7 +180,7 @@ public void displayTokens(List<Token> tokens, long elapsedTime) {
     private void voltarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarBtnActionPerformed
         AnalizadorView analizadorview = new AnalizadorView();
         analizadorview.setVisible(true);
-        this.setVisible(false);         // TODO add your handling code here:
+        this.setVisible(false);        
     }//GEN-LAST:event_voltarBtnActionPerformed
 
     /**

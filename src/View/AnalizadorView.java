@@ -5,6 +5,7 @@ package View;
 import Analizer.Analizador;
 import Controller.Controller;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -103,14 +104,41 @@ public class AnalizadorView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+ * Método chamado quando o botão de análise é pressionado.
+ * Obtém o código fonte da área de texto, cria uma nova tabela e um modelo de tabela,
+ * instancia um controlador com o analisador léxico e a tabela,
+ * realiza a análise do código fonte e exibe a tabela, ocultando a janela atual.
+ *
+ * Se o campo de código fonte estiver vazio, exibe uma mensagem de erro.
+ *
+ * @param evt O evento de ação que desencadeou o método.
+ */
     private void analyzeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeButtonActionPerformed
-        String sourceCode = sourceCodeTextArea.getText();
-        DefaultTableModel tokenTableModel = new DefaultTableModel(); // Create DefaultTableModel
-        TableView tableView = new TableView(tokenTableModel, elapsedTimeLabel);
-        Controller controller = new Controller(new Analizador(), tableView);
-        controller.analyzeSourceCode(sourceCode);
-        tableView.setVisible(true);
-        this.setVisible(false);
+     // Obtém o código fonte do campo de texto
+    String sourceCode = sourceCodeTextArea.getText();
+
+    // Verifica se o campo de código fonte está vazio
+    if (sourceCode.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, insira o código fonte.", "Erro", JOptionPane.ERROR_MESSAGE);
+        return; // Retorna sem realizar a análise se o campo estiver vazio
+    }
+
+    // Cria um modelo de tabela padrão
+    DefaultTableModel tokenTableModel = new DefaultTableModel();
+
+    // Cria uma nova tabela e passa o modelo de tabela e o rótulo de tempo de compilação
+    TableView tableView = new TableView(tokenTableModel, elapsedTimeLabel);
+
+    // Instancia um controlador com o analisador léxico e a tabela
+    Controller controller = new Controller(new Analizador(), tableView);
+
+    // Realiza a análise do código fonte
+    controller.analyzeSourceCode(sourceCode);
+
+    // Exibe a tabela e oculta a janela atual
+    tableView.setVisible(true);
+    this.setVisible(false);
     }//GEN-LAST:event_analyzeButtonActionPerformed
 
     /**
