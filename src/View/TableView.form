@@ -55,20 +55,15 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="ElapsedTimeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="voltarBtn" min="-2" pref="57" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane2" min="-2" pref="528" max="-2" attributes="0"/>
-                              <Component id="AnalizadorLexicoLabel" min="-2" pref="310" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <Component id="jScrollPane2" min="-2" pref="528" max="-2" attributes="0"/>
+                      <Component id="AnalizadorLexicoLabel" min="-2" pref="310" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="18" max="32767" attributes="0"/>
               </Group>
@@ -82,9 +77,9 @@
                   <EmptySpace pref="18" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" min="-2" pref="427" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="voltarBtn" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="ElapsedTimeLabel" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="voltarBtn" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="ElapsedTimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
@@ -201,7 +196,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="ElapsedTimeLabel"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tempo de Compilacao: 0 ms"/>
+            <Property name="text" type="java.lang.String" value="Tempo de Execucao: 0 ms"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Default Cursor"/>
             </Property>

@@ -47,7 +47,7 @@ public void displayTokens(List<Token> tokens, long elapsedTime) {
     }
 
     // Define o texto do rótulo de tempo de compilação para mostrar o tempo decorrido
-    ElapsedTimeLabel.setText("Tempo de Compilação: " + elapsedTime + " ms");
+    ElapsedTimeLabel.setText("Tempo de Execucao: " + elapsedTime + " ms");
 }
 
     public void displayError(String message) {
@@ -126,7 +126,7 @@ public void displayTokens(List<Token> tokens, long elapsedTime) {
         ElapsedTimeLabel.setFont(new java.awt.Font("Source Sans Pro Black", 0, 12)); // NOI18N
         ElapsedTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
         ElapsedTimeLabel.setLabelFor(ElapsedTimeLabel);
-        ElapsedTimeLabel.setText("Tempo de Compilacao: 0 ms");
+        ElapsedTimeLabel.setText("Tempo de Execucao: 0 ms");
         ElapsedTimeLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -134,17 +134,14 @@ public void displayTokens(List<Token> tokens, long elapsedTime) {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(ElapsedTimeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(voltarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AnalizadorLexicoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AnalizadorLexicoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -155,7 +152,7 @@ public void displayTokens(List<Token> tokens, long elapsedTime) {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(voltarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ElapsedTimeLabel))
                 .addGap(22, 22, 22))
