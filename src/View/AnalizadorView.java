@@ -3,7 +3,9 @@
 package View;
 
 import Analizer.Analizador;
+import Analizer.Token;
 import Controller.Controller;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -14,16 +16,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AnalizadorView extends javax.swing.JFrame {
 
-    /**
-     * Creates new form NewJFrame1
-     */
-    private TableView tableView;
     private JLabel elapsedTimeLabel;
 
     public AnalizadorView() {
         initComponents();
         elapsedTimeLabel = new JLabel();
-        
 
     }
 
@@ -41,6 +38,11 @@ public class AnalizadorView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         sourceCodeTextArea = new javax.swing.JTextArea();
         analyzeButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TokenTable = new javax.swing.JTable();
+        ElapsedTimeLabel = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        LinhaTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,35 +68,83 @@ public class AnalizadorView extends javax.swing.JFrame {
             }
         });
 
+        TokenTable.setBackground(new java.awt.Color(255, 255, 255));
+        TokenTable.setForeground(new java.awt.Color(0, 0, 0));
+        TokenTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Lexema", "Token", "Linha"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        TokenTable.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        TokenTable.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        jScrollPane2.setViewportView(TokenTable);
+
+        ElapsedTimeLabel.setBackground(new java.awt.Color(0, 0, 51));
+        ElapsedTimeLabel.setFont(new java.awt.Font("Source Sans Pro Black", 0, 12)); // NOI18N
+        ElapsedTimeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        ElapsedTimeLabel.setText("Tempo de Execucao: 0 ms");
+        ElapsedTimeLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        LinhaTextArea.setEditable(false);
+        LinhaTextArea.setColumns(20);
+        LinhaTextArea.setForeground(new java.awt.Color(255, 255, 255));
+        LinhaTextArea.setRows(5);
+        jScrollPane3.setViewportView(LinhaTextArea);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ElapsedTimeLabel)
                     .addComponent(analyzeButton)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AnalizadorLexicoLabel, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(AnalizadorLexicoLabel))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addComponent(AnalizadorLexicoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(6, 6, 6)
                 .addComponent(analyzeButton)
-                .addGap(23, 23, 23))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(ElapsedTimeLabel)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,41 +155,44 @@ public class AnalizadorView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
- * Método chamado quando o botão de análise é pressionado.
- * Obtém o código fonte da área de texto, cria uma nova tabela e um modelo de tabela,
- * instancia um controlador com o analisador léxico e a tabela,
- * realiza a análise do código fonte e exibe a tabela, ocultando a janela atual.
- *
- * Se o campo de código fonte estiver vazio, exibe uma mensagem de erro.
- *
- * @param evt O evento de ação que desencadeou o método.
- */
+     * Método chamado quando o botão de análise é pressionado. Obtém o código
+     * fonte da área de texto, cria uma nova tabela e um modelo de tabela,
+     * instancia um controlador com o analisador léxico e a tabela, realiza a
+     * análise do código fonte e exibe a tabela, ocultando a janela atual.
+     *
+     * Se o campo de código fonte estiver vazio, exibe uma mensagem de erro.
+     *
+     * @param evt O evento de ação que desencadeou o método.
+     */
     private void analyzeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeButtonActionPerformed
-     // Obtém o código fonte do campo de texto
-    String sourceCode = sourceCodeTextArea.getText();
+        String sourceCode = sourceCodeTextArea.getText();
 
-    // Verifica se o campo de código fonte está vazio
-    if (sourceCode.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor, insira o código fonte.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return; // Retorna sem realizar a análise se o campo estiver vazio
+        if (sourceCode.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira o código fonte.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Controller controller = new Controller(new Analizador(), this);
+        controller.analyzeSourceCode(sourceCode);
+    }//GEN-LAST:event_analyzeButtonActionPerformed
+
+    public void displayTokens(List<Token> tokens, long elapsedTime) {
+    // Obtém o modelo da tabela e limpa todas as linhas existentes
+    DefaultTableModel model = (DefaultTableModel) TokenTable.getModel();
+    model.setRowCount(0);
+
+    // Adiciona cada token como uma nova linha na tabela
+    for (Token token : tokens) {
+        model.addRow(new Object[]{token.getLexema(), token.getTokenClass(), token.getLinha()});
     }
 
-    // Cria um modelo de tabela padrão
-    DefaultTableModel tokenTableModel = new DefaultTableModel();
+    // Define o texto do rótulo de tempo de compilação para mostrar o tempo decorrido
+    ElapsedTimeLabel.setText("Tempo de Execucao: " + elapsedTime + " ms");
+}
 
-    // Cria uma nova tabela e passa o modelo de tabela e o rótulo de tempo de compilação
-    TableView tableView = new TableView(tokenTableModel, elapsedTimeLabel);
-
-    // Instancia um controlador com o analisador léxico e a tabela
-    Controller controller = new Controller(new Analizador(), tableView);
-
-    // Realiza a análise do código fonte
-    controller.analyzeSourceCode(sourceCode);
-
-    // Exibe a tabela e oculta a janela atual
-    tableView.setVisible(true);
-    this.setVisible(false);
-    }//GEN-LAST:event_analyzeButtonActionPerformed
+    public void displayError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Lexical Error", JOptionPane.ERROR_MESSAGE);
+    }
 
     /**
      * @param args the command line arguments
@@ -179,9 +232,14 @@ public class AnalizadorView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AnalizadorLexicoLabel;
+    private javax.swing.JLabel ElapsedTimeLabel;
+    private javax.swing.JTextArea LinhaTextArea;
+    private javax.swing.JTable TokenTable;
     private javax.swing.JButton analyzeButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea sourceCodeTextArea;
     // End of variables declaration//GEN-END:variables
 }

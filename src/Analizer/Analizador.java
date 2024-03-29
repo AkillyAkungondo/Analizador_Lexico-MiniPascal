@@ -138,7 +138,9 @@ public class Analizador {
         } else if (isNumber(word)) {
             tokens.add(new Token(word, "Number", lineNumber + 1));
         }
-        else{tokens.add(new Token(word,"erro",lineNumber+1));
+        else{      // Se a palavra não corresponder a nenhum tipo conhecido, adicione um token de erro
+        tokens.add(new Token(word, "Error", lineNumber + 1));
+    
             }
         }
     
