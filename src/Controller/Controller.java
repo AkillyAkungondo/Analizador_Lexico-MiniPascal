@@ -1,53 +1,53 @@
 package Controller;
 
-import Analizer.Analizador;
+import Analizer.Lexer;
 import Analizer.Token;
+import Controller.LexicalException;
 import View.AnalizadorView;
+
 import java.util.List;
 
+/**
+ * Controller responsável por gerenciar a análise léxica do código fonte.
+ */
 public class Controller {
-    private Analizador analizador;
-    private AnalizadorView analizadorView;
+
+    private Lexer lexer;
+    private AnalizadorView simpleAnalizadorView;
 
     /**
-     * Construtor da classe Controller.
-     * 
-     * @param analizador O analisador léxico a ser utilizado.
-     * @param analizadorView A view onde os tokens serão exibidos.
+     * Construtor que inicializa o Controller com um Lexer e uma AnalizadorView.
+     *
+     * @param lexer                O Lexer para análise léxica.
+     * @param simpleAnalizadorView A view para exibir resultados e erros.
      */
-    public Controller(Analizador analizador, AnalizadorView analizadorView) {
-        this.analizador = analizador;
-        this.analizadorView = analizadorView; // Atribui o objeto AnalizadorView fornecido
+    public Controller(Lexer lexer, AnalizadorView simpleAnalizadorView) {
+        this.lexer = lexer;
+        this.simpleAnalizadorView = simpleAnalizadorView;
     }
 
     /**
-     * Analisa o código fonte fornecido.
-     * 
+     * Analisa o código fonte fornecido, exibindo tokens e tempo de execução na view.
+     *
      * @param sourceCode O código fonte a ser analisado.
      */
     public void analyzeSourceCode(String sourceCode) {
-        // Verifica se o código fonte está vazio ou contém apenas espaços em branco
         if (sourceCode.trim().isEmpty()) {
-            // Se o código fonte estiver vazio, exibe uma mensagem de erro na tabela
-            analizadorView.displayError("O código fonte está vazio.");
+            simpleAnalizadorView.displayError("O código fonte está vazio.");
             return;
         }
 
         try {
-            // Inicia a contagem do tempo de análise
             long startTime = System.currentTimeMillis();
-
-            // Realiza a análise léxica do código fonte para gerar a lista de tokens
-            List<Token> tokens = analizador.analyze(sourceCode);
-
-            // Calcula o tempo decorrido durante a análise
+            lexer = new Lexer(sourceCode);
+            List<Token> tokens = lexer.analisar();
             long elapsedTime = System.currentTimeMillis() - startTime;
 
-            // Exibe os tokens na tabela, juntamente com o tempo de análise
-            analizadorView.displayTokens(tokens, elapsedTime);
+            System.out.println("Número de Tokens: " + tokens.size());
+
+            simpleAnalizadorView.displayTokens(tokens, elapsedTime);
         } catch (LexicalException e) {
-            // Se ocorrer uma exceção durante a análise léxica, exibe a mensagem de erro na tabela
-            analizadorView.displayError(e.getMessage());
+            simpleAnalizadorView.displayError("Erro léxico: " + e.getMessage());
         }
     }
 }

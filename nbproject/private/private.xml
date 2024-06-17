@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Analizer/Lexer.java</file>
             <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Analizer/Token.java</file>
+            <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Controller/LexicalException.java</file>
             <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/View/AnalizadorView.java</file>
-            <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Analizer/Analizador.java</file>
+            <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Analizer/TokenType.java</file>
+            <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Main/Main.java</file>
             <file>file:/C:/Users/Acer/Desktop/Analizador_Lexico-MiniPascal/src/Controller/Controller.java</file>
         </group>
     </open-files>
