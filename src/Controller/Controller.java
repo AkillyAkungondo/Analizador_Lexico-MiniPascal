@@ -2,7 +2,6 @@ package Controller;
 
 import Analizer.Lexer;
 import Analizer.Token;
-import Controller.LexicalException;
 import View.AnalizadorView;
 
 import java.util.List;
@@ -37,17 +36,13 @@ public class Controller {
             return;
         }
 
-        try {
-            long startTime = System.currentTimeMillis();
-            lexer = new Lexer(sourceCode);
-            List<Token> tokens = lexer.analisar();
-            long elapsedTime = System.currentTimeMillis() - startTime;
+        long startTime = System.currentTimeMillis();
+        lexer = new Lexer(sourceCode);
+        List<Token> tokens = lexer.analisar();
+        long elapsedTime = System.currentTimeMillis() - startTime;
 
-            System.out.println("Número de Tokens: " + tokens.size());
+        System.out.println("Número de Tokens: " + tokens.size());
 
-            simpleAnalizadorView.displayTokens(tokens, elapsedTime);
-        } catch (LexicalException e) {
-            simpleAnalizadorView.displayError("Erro léxico: " + e.getMessage());
-        }
+        simpleAnalizadorView.displayTokens(tokens, elapsedTime);
     }
 }

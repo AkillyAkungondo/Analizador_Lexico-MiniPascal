@@ -1,14 +1,15 @@
 package Analizer;
 
-import Analizer.Token;
-import Analizer.TokenType;
 import Controller.LexicalException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 public class Lexer {
+
     private String codigo;
     private int posicao;
     private int linhaAtual;
@@ -26,7 +27,7 @@ public class Lexer {
         KEYWORDS.put("while", TokenType.WHILE);
         KEYWORDS.put("do", TokenType.DO);
         KEYWORDS.put("integer", TokenType.INTEGER);
-      
+        KEYWORDS.put("real", TokenType.REAL);
     }
 
     public Lexer(String codigo) {
@@ -35,10 +36,23 @@ public class Lexer {
         this.linhaAtual = 1;
     }
 
-    public List<Token> analisar() throws LexicalException {
+    public List<Token> analisar() {
         List<Token> tokens = new ArrayList<>();
+        Token ultimoToken = null;
         while (hasNext()) {
-            tokens.add(nextToken());
+            try {
+                Token token = nextToken(tokens);
+                if (token.getType() != TokenType.WHITESPACE && token.getType() != TokenType.COMMENT) {
+                    if (ultimoToken != null && ultimoToken.getLinha() < linhaAtual && ultimoToken.getType() != TokenType.SEMICOLON) {
+                        tokens.add(new Token(TokenType.ERROR, "Faltando ponto e virgula", ultimoToken.getLinha()));
+                    }
+                    ultimoToken = token;
+                    tokens.add(token);
+                }
+            } catch (LexicalException e) {
+                tokens.add(new Token(TokenType.ERROR, e.getMessage(), linhaAtual));
+                skipToNextToken();
+            }
         }
         tokens.add(new Token(TokenType.EOF, "", linhaAtual));
         return tokens;
@@ -48,7 +62,7 @@ public class Lexer {
         return posicao < codigo.length();
     }
 
-    private Token nextToken() throws LexicalException {
+    private Token nextToken(List<Token> tokens) throws LexicalException {
         skipWhitespace();
         if (!hasNext()) {
             return new Token(TokenType.EOF, "", linhaAtual);
@@ -74,10 +88,10 @@ public class Lexer {
                 case '/':
                     if (posicao + 1 < codigo.length() && codigo.charAt(posicao + 1) == '/') {
                         skipLineComment();
-                        return nextToken(); // Recomeça a análise após o comentário de linha
+                        return nextToken(tokens); // Recomeça a análise após o comentário de linha
                     } else if (posicao + 1 < codigo.length() && codigo.charAt(posicao + 1) == '*') {
-                        skipBlockComment();
-                        return nextToken(); // Recomeça a análise após o comentário de bloco
+                        skipBlockComment(tokens);
+                        return nextToken(tokens); // Recomeça a análise após o comentário de bloco
                     } else {
                         posicao++;
                         return new Token(TokenType.DIVIDE, "/", linhaAtual);
@@ -92,8 +106,8 @@ public class Lexer {
                     posicao++;
                     return new Token(TokenType.RPAREN, ")", linhaAtual);
                 case '{':
-                    skipBlockComment();
-                    return nextToken(); // Recomeça a análise após o comentário de bloco
+                    skipBlockComment(tokens);
+                    return nextToken(tokens); // Recomeça a análise após o comentário de bloco
                 case ';':
                     posicao++;
                     return new Token(TokenType.SEMICOLON, ";", linhaAtual);
@@ -131,7 +145,7 @@ public class Lexer {
                 case '"':
                     return extractStringLiteral();
                 default:
-                    throw new LexicalException("Caractere inesperado: " + current + " na posição " + posicao);
+                    throw new LexicalException("Caractere inesperado: " + current + " na linha " + linhaAtual);
             }
         }
     }
@@ -146,8 +160,7 @@ public class Lexer {
     }
 
     private void skipLineComment() {
-        posicao++; // Pula o primeiro '/'
-        posicao++; // Pula o segundo '/'
+        posicao += 2; // Pula os dois caracteres '/'
         while (hasNext() && codigo.charAt(posicao) != '\n') {
             posicao++;
         }
@@ -155,8 +168,8 @@ public class Lexer {
         posicao++; // Pula o '\n'
     }
 
-    private void skipBlockComment() throws LexicalException {
-        posicao++; // Pula o '{' ou o '*' após '/'
+    private void skipBlockComment(List<Token> tokens) {
+        posicao++; // Pula o '{' ou o '/' seguido de '*'
         if (codigo.charAt(posicao) == '*') {
             posicao++; // Pula o '*'
             while (hasNext()) {
@@ -169,7 +182,7 @@ public class Lexer {
                 }
                 posicao++;
             }
-            throw new LexicalException("Comentário de bloco não fechado corretamente na linha " + linhaAtual);
+            tokens.add(new Token(TokenType.ERROR, "Comentário de bloco não fechado corretamente", linhaAtual));
         } else {
             while (hasNext() && codigo.charAt(posicao) != '}') {
                 if (codigo.charAt(posicao) == '\n') {
@@ -178,10 +191,18 @@ public class Lexer {
                 posicao++;
             }
             if (!hasNext()) {
-                throw new LexicalException("Comentário de bloco não fechado corretamente na linha " + linhaAtual);
+                tokens.add(new Token(TokenType.ERROR, "Comentário de bloco não fechado corretamente", linhaAtual));
+            } else {
+                posicao++; // Pula o '}'
             }
-            posicao++; // Pula o '}'
         }
+    }
+
+    private void skipToNextToken() {
+        while (hasNext() && !Character.isWhitespace(codigo.charAt(posicao))) {
+            posicao++;
+        }
+        skipWhitespace();
     }
 
     private Token extractNumber() {
@@ -213,17 +234,19 @@ public class Lexer {
         TokenType type = KEYWORDS.getOrDefault(lexeme, TokenType.IDENTIFIER);
         return new Token(type, lexeme, linhaAtual);
     }
-    
+
     private Token extractStringLiteral() throws LexicalException {
         char delimiter = codigo.charAt(posicao);
         posicao++; // Pula o delimitador inicial (aspas simples ou duplas)
         int start = posicao;
-        while (hasNext() && codigo.charAt(posicao) != delimiter) {
+        while (hasNext()
+                && codigo.charAt(posicao) != delimiter) {
             if (codigo.charAt(posicao) == '\n') {
                 throw new LexicalException("String literal não fechada corretamente na linha " + linhaAtual);
             }
             posicao++;
         }
+
         if (!hasNext()) {
             throw new LexicalException("String literal não fechada corretamente na linha " + linhaAtual);
         }
@@ -231,5 +254,7 @@ public class Lexer {
         return new Token(TokenType.STRING_LITERAL, codigo.substring(start, posicao - 1), linhaAtual);
     }
 
-   
+    private boolean isReservedWord(String lexeme) {
+        return KEYWORDS.containsKey(lexeme);
+    }
 }

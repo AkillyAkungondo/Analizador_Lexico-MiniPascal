@@ -2,13 +2,16 @@ package View;
 
 import Analizer.Lexer;
 import Analizer.Token;
-import Controller.Controller;
+import Analizer.TokenType;
 import Controller.Controller;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +35,7 @@ public class AnalizadorView extends JFrame {
         setTitle("Analizador Lexico");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
+        
 
         // Label "Analizador Lexico"
         JLabel analizadorLexicoLabel = new JLabel("Analizador Lexico");
@@ -114,6 +118,25 @@ public class AnalizadorView extends JFrame {
         }
 
         elapsedTimeLabel.setText("Tempo de Execução: " + elapsedTime + " ms");
+        highlightErrors(tokens);
+    }
+
+    private void highlightErrors(List<Token> tokens) {
+        Highlighter highlighter = sourceCodeTextArea.getHighlighter();
+        highlighter.removeAllHighlights();
+        Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+
+        for (Token token : tokens) {
+            if (token.getType() == TokenType.ERROR) {
+                try {
+                    int start = sourceCodeTextArea.getLineStartOffset(token.getLinha() - 1);
+                    int end = sourceCodeTextArea.getLineEndOffset(token.getLinha() - 1);
+                    highlighter.addHighlight(start, end, painter);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void displayError(String message) {
